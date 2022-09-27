@@ -12,3 +12,5 @@ petal_length_mean
 #make a histogram plot
 hist(Petal_Length)
 
+library(testthat)
+test_dir(test_path(), reporter="Summary")
