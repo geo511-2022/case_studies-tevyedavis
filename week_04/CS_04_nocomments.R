@@ -33,7 +33,7 @@ final<-jn %>% select("dest", "name")
 
 row1<-final[1,]
 
-farthest_airport<-as.character(row1)
+farthest_airportss<-as.character(row1)
 
-farthest_airport
+farthest_airportss
 
