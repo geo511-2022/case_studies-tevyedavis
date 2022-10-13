@@ -1,0 +1,48 @@
+---
+title: "Project Proposal Template"
+author: tev'ye Davis
+output: 
+  github_document
+---
+
+
+# Introduction to problem/question
+In order to effectively respond and manage Covid, governmnet agencies need to understand how cases are distributed.  
+  
+# Problem / Question
+What zip code or census tract has the most covid 19 cases for a specific date in NYC. 
+
+# Inspiring Examples
+
+Include links and screenshots (or embedded images) of a few (~3-5) example graphics found on the internet that convey what you want to do.  Include a few sentences about why you selected each link.
+
+## Example 1
+![](https://static01.nyt.com/newsgraphics/2020/03/23/nyc-coronavirus/5cb6fd5eb22938cf9618aa5fa39c25b305624a07/cases-all.png)
+
+
+
+The graphic uses proportional circles to depict the number of covid 19 cases.
+
+## Example 2    
+![](https://images.squarespace-cdn.com/content/v1/577688426b8f5b89f05b23f0/1585612766454-93MBNO1T15Y39QXT6C6J/Screen+Shot+2020-03-30+at+5.44.32+PM.png?format=2500w)
+
+
+The graphic uses a choropleth map which is shaded with graduated colors to representuses the number of covid 19 cases.
+
+
+## Example 3
+![](https://www.ny1.com/content/dam/News/2020/05/18/gfx_covid_by_zipcodemapvo051112221201544png)
+
+The graphic uses a choropleth map and also has an option to change layers to represent different data.
+
+# Proposed data sources
+
+NYC open data.
+
+# Proposed methods
+
+library(tidyverse)- clean or format the data, plot maps and graphs.
+
+# Expected results
+
+A map show where the highest cases of covid 19 are via zip code or census tract. 
