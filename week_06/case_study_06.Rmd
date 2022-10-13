@@ -1,7 +1,57 @@
 ---
 title: "Case Study 06"
-author: Your Name
+author: Tev'ye Davis
 date: August 1, 2020
 output: github_document
 ---
- 
+#install.packages('raster')
+library(raster)
+library(sp)
+library(spData)
+library(tidyverse)
+library(sf)
+
+#view(world)
+#prepare country polygon data (the world object) by removing Antarctica. 
+world2<-world %>% filter(name_long!= "Antarctica")
+
+as(world2,"Spatial") #Convert the world object to sp
+
+#prepare climate data
+
+#install.packages('ncdf4')
+library(ncdf4)
+download.file("https://crudata.uea.ac.uk/cru/data/temperature/absolute.nc","crudata.nc",method="curl")
+tmean=raster("crudata.nc")
+
+#inspect object
+tmean
+
+plot(tmean)
+
+#make data layer more intuitive by changing the default name
+names(tmean) <-"tmax"
+tmax #print results/ change
+
+#Calculate the maximum temperature observed in each country
+E<-raster::extract(tmean, world2, fun=max, na.rm=T, small=T, sp=T ) #Extract values from a Raster object at the locations of spatial vector data 
+tmax_country<-st_as_sf(E) #convert back to sf
+tmax_country #print results
+view(tmax_country)
+#communicate your results
+
+ggplot(tmax_country, aes(fill=tmax)) + 
+geom_sf() +
+scale_fill_viridis_c(name="Annual\nMaximum\nTemperature (C)") +
+theme(legend.position = 'bottom')
+
+hottest_continents <- tmax_country %>%
+  group_by(continent) %>%
+  top_n(1, tmax) %>%
+  select(name_long, continent, tmax) %>%
+  st_set_geometry(NULL) %>%
+  arrange(desc(tmax))
+
+hottest_continents
+
+
