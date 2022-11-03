@@ -4,4 +4,58 @@ author: Your Name
 date: August 1, 2020
 output: github_document
 ---
- 
+
+
+library(sf)
+library(tidyverse)
+library(ggmap)
+#install.packages("rnoaa")
+library(rnoaa)
+library(spData)
+data(world)
+data(us_states)
+
+# Download zipped data from noaa with storm track information
+dataurl="https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/shapefile/IBTrACS.NA.list.v04r00.points.zip"
+
+tdir=tempdir()
+download.file(dataurl,destfile=file.path(tdir,"temp.zip"))
+unzip(file.path(tdir,"temp.zip"),exdir = tdir) #unzip the compressed folder
+
+storm_data <- read_sf(list.files(tdir,pattern=".shp",full.names = T))
+
+
+storm_data2<- filter(storm_data, SEASON >=1950) %>%
+mutate_if(is.numeric, function(x) ifelse(x==-999.0,NA,x)) %>%
+mutate(decade=(floor(year/10)*10))
+
+#glimpse(storm_data2)
+storm_data2
+#glimpse(world)
+
+region<-st_bbox(c(xmin= -128.5, ymin=6.2, xmax=63, ymax= 83.01))
+
+#region
+
+ggplot(storm_data2) +
+facet_wrap(~decade) +
+stat_bin2d(data=storm_data2, aes(y=st_coordinates(storm_data2)[,2], x=st_coordinates(storm_data2)[,1]),bins=100) +
+scale_fill_distiller(palette="YlOrRd", trans="log", direction=-1, breaks = c(1,10,100,1000)) +
+coord_sf(ylim=region[c(2,4)], xlim=region[c(1,3)]) +
+labs(x="", y="")
+
+us_states <-st_transform(us_states,st_crs(storm_data2))
+temp <-us_states%>%select(state=NAME)
+table_states <- st_join(storm_data2, temp, join = st_intersects,left = F)
+table <-table_states%>%group_by(state)%>%
+  summarize(storms=length(unique(NAME)))%>%
+  arrange(desc(storms))%>%
+  slice(1:5)%>%
+  st_drop_geometry()
+table
+
+
+
+
+
+
