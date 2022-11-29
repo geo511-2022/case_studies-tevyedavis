@@ -4,4 +4,34 @@ author: Your Name
 date: August 1, 2020
 output: github_document
 ---
- 
+
+library(dplyr)
+library(ggplot2)
+library(ggmap)
+
+#install.packages("htmlwidgets")
+library(htmlwidgets)
+#install.packages("widgetframe")
+library(widgetframe)
+
+library(tidyverse)
+#install.packages("rnoaa")
+library(rnoaa)
+
+#install.packages("xts")
+library(xts)
+
+#install.packages("dygraphs")
+library(dygraphs)
+
+d=meteo_tidy_ghcnd("USW00014733",
+                   date_min = "2016-01-01", 
+                   var = c("TMAX"),
+                   keep_flags=T) %>% 
+   mutate(date=as.Date(date),
+          tmax=as.numeric(tmax)/10) #Divide the tmax data by 10 to convert to degrees.
+          
+?xts
+xts(d$tmax
+)
+
