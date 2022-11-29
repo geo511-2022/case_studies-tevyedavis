@@ -159,4 +159,3 @@ p<-ggplot(lcds1)+
   theme(axis.text.x=element_text(angle=90, hjust=1))
   
 p+geom_violin(aes(month,value), trim=TRUE, scale = "width", colour = "red", fill = "grey80")
-
