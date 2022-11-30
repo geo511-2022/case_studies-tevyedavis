@@ -31,7 +31,11 @@ d=meteo_tidy_ghcnd("USW00014733",
    mutate(date=as.Date(date),
           tmax=as.numeric(tmax)/10) #Divide the tmax data by 10 to convert to degrees.
           
-?xts
-xts(d$tmax
+          
+p<-xts(d$tmax, 
+order.by=d$date,
 )
+
+dygraph(p, main="Daily Maximum Temperature in Buffalo, NY") %>%
+dyRangeSelector(dateWindow = c("2020-01-01", "2020-10-31"))
 
