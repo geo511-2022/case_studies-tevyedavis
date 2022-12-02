@@ -1,22 +1,49 @@
 ---
 title: "Case Study 04"
-author: Your Name
+author: Tev'ye Davis
 date: August 1, 2020
 output: github_document
 ---
+#libraries used in the solution
+library(tidyverse)
+library(nycflights13)
 
-## First Header
 
-Comments
+#The nycflights13 package provides the following data frames.
 
-```{r}
-summary(cars)
-```
+#flights : all flights that departed from NYC in 2013
+#weather : hourly meterological data for each airport
+#planes : construction information about each plane
+#airports : airport names and locations
+#airlines : translation between two letter carrier codes and names
 
-## Second Header
+#TASK***Find the airport code that is farthest from the New York Airports 
 
-Comments
+#view the dataframes to identify primary key and foreign key
+#view(flights) #column of interest "distance" & "dest"
+#view(airports) #column of interest "faa" & "name"
 
-```{r}
-plot(pressure)
-```
+#SOLUTION
+#arrange the distance in descending order in the filghts dataframe
+ar<-arrange(flights, desc(distance))
+
+#view the results
+#view(ar)
+
+#join primary key and foreign key. Note left join only keeps the left dataframe which is flights
+jn<-left_join(ar, airports,by=c("dest"="faa")) 
+
+#view results
+#view(jn)
+
+#select only the dest & Name column
+final<-jn %>% select("dest", "name")
+
+#Convert the dataframe to a single character value by first selecting the first row
+row1<-final[1,]
+
+#Save the resulting airport name as an object called farthest_airport
+farthest_airport<-as.character(row1)
+
+farthest_airport
+

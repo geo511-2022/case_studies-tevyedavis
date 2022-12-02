@@ -1,7 +1,49 @@
----
-title: "Case Study 05"
-author: Your Name
-date: August 1, 2020
-output: github_document
----
- 
+#---
+#title: "Case Study 05"
+#author: Your Name
+#date: August 1, 2020
+#output: github_document
+#---
+
+
+library(spData) 
+#install.packages("sf")
+library(sf)
+library(tidyverse)
+library(units) 
+
+#load 'world' data from spData package
+data(world)  
+# load 'states' boundaries from spData package
+data(us_states)
+# plot(world[1])  #plot if desired
+# plot(us_states[1]) #plot if desired
+
+#projections
+albers="+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
+
+#buffer
+canada<-filter(world,name_long=="Canada")%>%
+st_transform(albers)%>%
+st_buffer(dist= 10000)
+
+#filter and transform NY
+NY<-filter(us_states, NAME=="New York")%>%
+st_transform(albers)
+
+#intersection
+result<-st_intersection(NY, canada)
+
+
+#visualize
+ggplot()+
+geom_sf(data = NY) +
+geom_sf(data = result, fill = 'red') +
+ggtitle('New York Land within 10 km')
+
+Area <- st_area(result)%>%
+set_units(km^2)
+
+Area
+  
+  
